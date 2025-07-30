@@ -1,6 +1,3 @@
-# ml_consumer_advanced.py
-
-# --- 1. Import necessary libraries ---
 import pika
 import json
 import time
@@ -15,8 +12,6 @@ from pika.exceptions import AMQPConnectionError
 
 # --- 2. Setup Redis Connection & Initial Data ---
 
-# Connect to our local Redis server. The `db=0` is the default database.
-# `decode_responses=True` ensures that results from Redis are returned as strings.
 try:
     redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
     # Ping the server to check the connection.
@@ -27,11 +22,8 @@ except redis.exceptions.ConnectionError as e:
     print(f"Error: {e}")
     exit() # Exit if we can't connect to our core database.
 
-# The key in Redis where we will store our set of blocklisted domains.
 BLOCKLIST_KEY = "blocklisted_domains"
 
-# For demonstration, we'll populate the blocklist on startup if it doesn't exist.
-# In a real system, this list would be managed by a separate process.
 INITIAL_BLOCKLISTED_DOMAINS = {
     "paypal-secure.net", "microsoft-support.info", "secure-login-update.com",
     "apple-security-alert.net", "bankofamerica-verify.org", "billing-paypal-secure.net",
