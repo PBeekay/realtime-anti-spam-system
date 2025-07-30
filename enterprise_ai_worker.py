@@ -1,5 +1,3 @@
-# enterprise_ai_worker.py
-
 import pika, json, time, re, redis
 import requests # Import the standard requests library
 from urllib.parse import urlparse
