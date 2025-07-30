@@ -4,9 +4,6 @@
 import pika
 import json
 from fastapi import FastAPI, HTTPException
-# --- THIS IS THE KEY FIX ---
-# We import the specific exception class directly from pika.exceptions.
-# This is the modern, robust way to handle connection errors.
 from pika.exceptions import AMQPConnectionError
 from pydantic import BaseModel
 from typing import Dict, Any
@@ -28,7 +25,6 @@ app = FastAPI()
 def publish_to_queue(email: Email):
     """Connects to RabbitMQ and publishes a full email object."""
     try:
-        # We add a timeout to prevent the application from hanging indefinitely.
         params = pika.ConnectionParameters(host='localhost', blocked_connection_timeout=5)
         connection = pika.BlockingConnection(params)
         
@@ -47,7 +43,6 @@ def publish_to_queue(email: Email):
         connection.close()
         return True
     # --- AND THIS IS THE OTHER PART OF THE FIX ---
-    # We now catch the specific 'AMQPConnectionError' that we imported above.
     except AMQPConnectionError as e:
         print(f"FATAL: Could not connect to RabbitMQ at 'localhost'. Please ensure the Docker container is running and accessible.")
         print(f"Pika Error: {e}")
